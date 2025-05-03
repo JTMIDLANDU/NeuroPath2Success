@@ -1,0 +1,131 @@
+# Create the content of the three files: index.html, style.css, and script.js
+html_content = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroPath2Success</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>NeuroPath2Success</h1>
+        <p>Your Brain-Based Habit Helper</p>
+    </header>
+    <main>
+        <section class="input-section">
+            <label for="goal">What’s your focus today?</label>
+            <input type="text" id="goal" placeholder="e.g., Improve focus, reduce stress" />
+            <button onclick="suggestHabits()">Suggest Habits</button>
+        </section>
+        <section id="suggestions" class="suggestions-section">
+            <!-- Habit suggestions will appear here -->
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 NeuroPath2Success</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+"""
+
+css_content = """
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+header {
+    background: #4f46e5;
+    color: white;
+    padding: 1.5rem 0;
+}
+
+main {
+    padding: 2rem;
+}
+
+.input-section {
+    margin-bottom: 2rem;
+}
+
+input[type="text"] {
+    padding: 0.5rem;
+    width: 60%;
+    max-width: 300px;
+    margin-right: 0.5rem;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #059669;
+}
+
+.suggestions-section {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+"""
+
+js_content = """
+function suggestHabits() {
+    const input = document.getElementById("goal").value.toLowerCase();
+    const output = document.getElementById("suggestions");
+    output.innerHTML = "";
+
+    const habits = {
+        focus: ["Pomodoro technique", "Digital detox hour", "Morning planning ritual"],
+        stress: ["Deep breathing", "Nature walk", "Gratitude journaling"],
+        energy: ["Cold shower", "High-protein breakfast", "10-min jumpstart workout"]
+    };
+
+    let found = false;
+    for (let key in habits) {
+        if (input.includes(key)) {
+            found = true;
+            const list = document.createElement("ul");
+            habits[key].forEach(habit => {
+                const li = document.createElement("li");
+                li.textContent = habit;
+                list.appendChild(li);
+            });
+            output.appendChild(list);
+        }
+    }
+
+    if (!found) {
+        output.textContent = "Try entering 'focus', 'stress', or 'energy' to get started!";
+    }
+}
+"""
+
+# Save these files into a zip
+from zipfile import ZipFile
+import os
+
+zip_path = "/mnt/data/NeuroPath2Success.zip"
+
+with ZipFile(zip_path, 'w') as zipf:
+    for filename, content in [("index.html", html_content), ("style.css", css_content), ("script.js", js_content)]:
+        filepath = f"/mnt/data/{filename}"
+        with open(filepath, "w") as file:
+            file.write(content)
+        zipf.write(filepath, arcname=filename)
+
+zip_path
